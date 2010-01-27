@@ -1,0 +1,36 @@
+function showPreviewLink() {
+    var type = getCheckedValue(document.forms['add'].class);
+    var data = document.getElementById(type).value;
+    
+    // Only try to update the preview link if text exists in the data field.
+    if (data) {
+        <mt:If name="search_override">
+            var includeBlogs = assembleBlogIDs();
+        <mt:Else>
+            var includeBlogs = '<mt:Var name="specified_blogs">';
+        </mt:If>
+
+        var linkURL;
+        if (type == 'url') {
+            linkURL = data;
+        }
+        else if (type == 'keyword') {
+            linkURL = '<mt:Var name="view_search_url">&IncludeBlogs=' + includeBlogs + '&search=' + data;
+        }
+        else if (type == 'tag') {
+            linkURL = '<mt:Var name="view_search_url">&IncludeBlogs=' + includeBlogs + '&tag=' + data;
+        }
+
+        var newViewLink = document.createElement('a');
+        newViewLink.setAttribute('href',   linkURL);
+        newViewLink.setAttribute('target', '_blank');
+        newViewLink.setAttribute('style',  'display: block;');
+        newViewLink.setAttribute('title',  'Preview this topic.');
+        newViewLink.innerHTML = 'Preview: <img src="<mt:Var name="static_uri">images/status_icons/view.gif" width="13" height="9" alt="View" />';
+
+        var linkContainer = document.getElementById('view-link-' + type);
+        linkContainer.removeAttribute('class', 'hidden');
+        linkContainer.innerHTML = ''; // To remove any existing link data.
+        linkContainer.appendChild(newViewLink);
+    }
+}

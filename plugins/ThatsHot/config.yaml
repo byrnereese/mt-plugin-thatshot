@@ -1,0 +1,133 @@
+name: "That's Hot"
+id: thats_hot
+description: 'Create links to &ldquo;Hot Topics&rdquo;'
+author_name: Endevver
+author_link: http://endevver.com
+icon: 'images/icon.png'
+version: 1.0
+schema_version: 7
+
+settings:
+    th_enable:
+        scope: blog
+        default: 0
+    th_hot_length:
+        scope: blog
+        default: 24
+    th_hot_limit:
+        scope: blog
+        default: 5
+    th_republish_template:
+        scope: blog
+    th_search_blog_ids:
+        scope: blog
+    th_search_blog_ids_override:
+        scope: blog
+    th_search_alt_tmpl:
+        scope: blog
+    th_tag_suggestions:
+        scope: blog
+        default: 1
+    th_basename_override:
+        scope: blog
+
+blog_config_template: 
+    code: ThatsHot::CMS::settings
+
+callbacks:
+    post_run: '$ThatsHot::ThatsHot::CMS::init_app'
+
+applications:
+    cms:
+        menus:
+            create:hot_topic:
+                label: 'Hot Topic'
+                order: 500
+                dialog: add_hot_topic
+                view: blog
+            manage:hot_topics:
+                label: 'Hot Topics'
+                order: 50000
+                mode: list_hot_topics
+                view: blog
+        methods:
+            add_hot_topic:   '$ThatsHot::ThatsHot::CMS::add_hot_topic'
+            save_hot_topic:  '$ThatsHot::ThatsHot::CMS::save_hot_topic'
+            save_hot_topic_from_search: '$ThatsHot::ThatsHot::CMS::save_hot_topic_from_search'
+            list_hot_topics: '$ThatsHot::ThatsHot::CMS::hot_topic_listing'
+            edit_topic:      '$ThatsHot::ThatsHot::CMS::edit_topic'
+            save_topic:      '$ThatsHot::ThatsHot::CMS::save_topic'
+            list_topics:     '$ThatsHot::ThatsHot::CMS::topic_listing'
+            make_hot_now:    '$ThatsHot::ThatsHot::CMS::make_hot_now'
+            make_cold_now:   '$ThatsHot::ThatsHot::CMS::make_cold_now'
+
+list_filters:
+    hot_topics:
+        scheduled_only:
+            label: 'Scheduled topics'
+            order: 1
+            handler: '$ThatsHot::ThatsHot::CMS::filter_scheduled'
+        hot_only:
+            label: 'Hot topics'
+            order: 2
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot'
+        cold_only:
+            label: 'Cold topics'
+            order: 3
+            handler: '$ThatsHot::ThatsHot::CMS::filter_cold'
+        hot_today:
+            label: 'Hot today'
+            order: 4
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot_today'
+        hot_yesterday:
+            label: 'Hot yesterday'
+            order: 5
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot_yesterday'
+        hot_7_days:
+            label: 'Hot in the last 7 days'
+            order: 6
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot_7_days'
+        hot_this_month:
+            label: 'Hot this month'
+            order: 7
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot_this_month'
+        hot_last_month:
+            label: 'Hot last month'
+            order: 8
+            handler: '$ThatsHot::ThatsHot::CMS::filter_hot_last_month'
+
+list_actions:
+    hot_topics:
+        delete:
+            label: 'Delete'
+            order: 100
+            code: '$ThatsHot::ThatsHot::CMS::delete_hot_topic'
+            permissions: can_administer_blog
+
+tags:
+    block:
+        HotTopics: '$ThatsHot::ThatsHot::Tags::hot_topics_block'
+        Topics:    '$ThatsHot::ThatsHot::Tags::topics_block'
+    function:
+        TopicID:           '$ThatsHot::ThatsHot::Tags::topic_id'
+        TopicBasename:     '$ThatsHot::ThatsHot::Tags::topic_basename'
+        TopicTitle:        '$ThatsHot::ThatsHot::Tags::topic_title'
+        TopicClass:        '$ThatsHot::ThatsHot::Tags::topic_class'
+        TopicData:         '$ThatsHot::ThatsHot::Tags::topic_data'
+        TopicIncludeBlogs: '$ThatsHot::ThatsHot::Tags::topic_include_blogs'
+        TopicStatus:       '$ThatsHot::ThatsHot::Tags::topic_status'
+        TopicDate:         '$ThatsHot::ThatsHot::Tags::topic_date'
+        TopicAuthorID:     '$ThatsHot::ThatsHot::Tags::topic_author_id'
+        TopicPermalink:    '$ThatsHot::ThatsHot::Tags::topic_permalink'
+
+object_types:
+    topics:     'ThatsHot::Topics'
+    hot_topics: 'ThatsHot::HotTopics'
+
+tasks:
+    update_topics:
+        label: 'Update topics: making scheduled topics Hot, and expired Hot topics Cold.'
+        # Frequency is specified in seconds. 900 seconds is 15 minutes.
+        frequency: 900
+        code: '$ThatsHot::ThatsHot::CMS::update_topics'
+

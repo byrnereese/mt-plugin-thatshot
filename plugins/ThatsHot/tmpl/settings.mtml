@@ -1,0 +1,77 @@
+<mtapp:SettingGroup id="thats_hot-enable">
+    <mtapp:Setting
+        id="th_enable"
+        label="Enable That&rsquo;s Hot">
+        <input type="checkbox" name="th_enable" id="th_enable" value="1"<mt:If name="th_enable"> checked="checked"</mt:If> />
+        <label for="th_enable">Enable That&rsquo;s Hot on this blog. Disabling hides the associated menu items.</label>
+    </mtapp:Setting>
+</mtapp:SettingGroup>
+
+<mtapp:SettingGroup id="thats_hot-settings">
+    <mtapp:Setting
+        id="th_hot_length"
+        label="Keep Hot For...">
+            Keep a topic Hot for <input type="text" name="th_hot_length" id="th_hot_length" value="<mt:Var name="th_hot_length">" size="2" style="text-align: center;" /> hours.
+    </mtapp:Setting>
+    <mtapp:Setting
+        id="th_hot_limit"
+        label="Hot Topic Soft Limit">
+            Set a soft-limit: nag the user when there are more than <input type="text" name="th_hot_limit" id="th_hot_limit" value="<mt:Var name="th_hot_limit">" size="2" style="text-align: center;" /> hot topics. This option does not prevent more hot topics from being created or scheduled; it&rsquo;s just a notification.
+    </mtapp:Setting>
+</mtapp:SettingGroup>
+
+<mtapp:SettingGroup id="republish_template-thats_hot-fieldset">
+    <mtapp:Setting
+        id="th_republish_template"
+        label="Republish Template"
+        hint="Specify a template to be published after a topic is made hot or cold."
+        show_hint="1">
+            <select name="th_republish_template">
+                <option value="0">None</option>
+            <mt:Loop name="index_templates">
+                <option value="<mt:Var name="id">"<mt:If name="selected"> selected</mt:If>><mt:Var name="name" escape="html"></option>
+            </mt:Loop>
+            </select>
+    </mtapp:Setting>
+</mtapp:SettingGroup>
+
+<mtapp:SettingGroup id="search-thats_hot-fieldset">
+    <mtapp:Setting
+        id="th_search_blogs"
+        label="Search Blog IDs"
+        hint="When creating a keyword search or tag topic, use these blogs as <code>IncludeBlogs</code> parameters. Enter a list of comma-separated values. By default, only the current blog is included. Also used in view and preview links."
+        show_hint="1">
+            <input type="text" name="th_search_blog_ids" id="th_search_blog_ids" value="<mt:Var name="th_search_blog_ids">" style="width: 100%;" />
+    </mtapp:Setting>
+    <mtapp:Setting
+        id="th_search_blogs_override"
+        label="Allow Override of Search Blog IDs">
+            <input type="checkbox" name="th_search_blog_ids_override" id="th_search_blog_ids_override" <mt:If name="th_search_blog_ids_override">checked="checked"</mt:if>>
+            <label for="th_search_blog_ids_override">While creating or editing a topic, allow the user to override the blog IDs specified for keyword and tag searches. (This can help to better tune search results.)</label>
+    </mtapp:Setting>
+    <mtapp:Setting
+        id="th_search_alt_template"
+        label="Preview with Alt. Search Template"
+        hint="If you&rsquo;re displaying tag or keyword search results with an alternate search template (with the <a href="http://www.movabletype.org/documentation/appendices/config-directives/searchalttemplate.html"><code>SearchAltTemplate</code> config directive</a>), you can also specify that value here so that View and Preview links also use that directive. If you&rsquo;re not using an alternate search template, leave this field blank."
+        show_hint="1">
+            <input type="text" name="th_search_alt_tmpl" id="th_search_alt_tmpl" value="<mt:Var name="th_search_alt_tmpl">" style="width: 100%;" />
+    </mtapp:Setting>
+</mtapp:SettingGroup>
+
+<mtapp:SettingGroup id="tags-thats_hot-fieldset">
+    <mtapp:Setting
+        id="th_tag_suggestions"
+        label="Enable Tag Suggestions">
+            <input type="checkbox" name="th_tag_suggestions" id="th_tag_suggestions" <mt:If name="th_tag_suggestions">checked="checked"</mt:if>>
+            <label for="th_tag_sugestions">Display tag suggestions (the most-recent and most-used tags) when creating a topic.</label>
+    </mtapp:Setting>
+</mtapp:SettingGroup>
+
+<mtapp:SettingGroup id="basename-thats_hot-fieldset">
+    <mtapp:Setting
+        id="th_basename_override"
+        label="Override Basename">
+            <input type="checkbox" name="th_basename_override" id="th_basename_override" <mt:If name="th_basename_override">checked="checked"</mt:if>>
+            <label for="th_basename_override">While creating a topic, allow the user to override the basename. (A basename is automatically generated for each topic. Basenames can <em>always</em> be edited on the Edit Topic screen.)</label>
+    </mtapp:Setting>
+</mtapp:SettingGroup>

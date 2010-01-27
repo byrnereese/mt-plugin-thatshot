@@ -1,0 +1,99 @@
+<mt:setvarblock name="page_title">Add a new Hot Topic</mt:setvarblock>
+<mt:SetVarBlock name="html_head" append="1">
+    <script type="text/javascript" src="<mt:Var name="static_uri">plugins/ThatsHot/js/cms.js"></script>
+    <link rel="stylesheet" href="<mt:Var name="static_uri">plugins/ThatsHot/css/cms.css" type="text/css" />
+</mt:SetVarBlock>
+<mt:setvarblock name="js_include" append="1">
+<script type="text/javascript" src="http://localhost/mt4261-static/mt.js?v=4.261"></script>
+<script type="text/javascript" src="<mt:var name="static_uri">js/edit.js?v=<mt:var name="mt_version" escape="url">"></script>
+<mt:include name="include/calendar.tmpl">
+</mt:setvarblock>
+
+<mt:Include name="dialog/header.tmpl">
+
+<div id="modal-mask" class="autolayout-height-parent modal-mask hidden">
+    <div></div>
+</div>
+
+<mt:Ignore> Don't use the html_body variable for the calendar, because it will include the "autolayout-flyout-smart" class, which positions the calendar poorly.
+<mt:Var name="html_body">
+</mt:Ignore>
+
+<div id="calendar" class="calendar hidden">
+    <div id="calendar-content" class="calendar-content pkg"></div>
+    <div class="calendar-footer">
+        <input type="hidden" id="calendar-time-input" name="ignore-me-time-input" value="00:00:00" />
+        <a class="calendar-ok-link" href="javascript:void(0);" mt:command="save"><__trans phrase="OK"></a>
+    </div>
+</div>
+
+<div id="msg-container">
+    <mtapp:statusmsg
+        id="message"
+        class="info">
+        Your topic search yielded several results. Select one of the results presented below and make it hot.
+    </mtapp:statusmsg>
+</div>
+
+<form method="post" action="<mt:Var name="script_url">" name="search_result">
+    <input type="hidden" name="__mode" value="save_hot_topic_from_search" />
+    <input type="hidden" name="blog_id" value="<mt:Var name="blog_id">" />
+
+    <mtapp:Setting
+        id="search-result"
+        label="Search Results">
+        <ul id="search-results">
+        <mt:SetVar name="count" value="1">
+        <mt:Loop name="results">
+            <li class="search-results-item">
+                <input type="radio" name="id" id="id_<mt:Var name="id">" value="<mt:Var name="id">"<mt:If name="count" eq="1"> checked="checked"</mt:if>>
+                <label for="id_<mt:Var name="id">"><mt:Var name="title"><br />
+                    <mt:Var name="class">: <a href="<mt:Var name="view">" target="_blank"><mt:Var name="data"></a> <a href="<mt:Var name="view">" target="_blank"><img src="<mt:Var name="static_uri">images/status_icons/view.gif" width="13" height="9" alt="View" /></a></label>
+            </li>
+            <mt:SetVar name="count" op="++">
+        </mt:Loop>
+        </ul>
+    </mtapp:Setting>
+
+    <mtapp:setting
+        id="status"
+        label="Status">
+        <div>
+            <input type="radio" name="status" id="status-now" value="1" onClick="StatusNow();" checked="checked" />
+            <label for="status-now">Make this topic hot now.</label>
+        </div>
+        <div>
+            <input type="radio" name="status" id="status-schedule" value="2" onClick="StatusSchedule();" />
+            <label for="status-schedule">Schedule this topic&rsquo;s hotness.</label>
+            <span id="date-time-fields" class="hidden">
+                <input id="created-on" class="topic-date" name="date" value="<mt:Var name="date" escape="html">" />
+                <a href="javascript:void(0);" mt:command="open-calendar-created-on" class="date-picker" title="Select scheduled date"><span>Choose Date</span></a>
+                <input class="topic-time" name="time" value="<mt:Var name="time" escape="html">" />
+            </span>
+        </div>
+    </mtapp:setting>
+
+    <div class="actions-bar">
+        <div class="actions-bar-inner pkg actions">
+            <button
+                mt:mode="save_hot_topic_from_search"
+                type="submit"
+                class="primary-button"
+                accesskey="s"
+                title="Save (s)">Save</button>
+            <button
+                mt:mode="add_hot_topic"
+                type="submit"
+                class=""
+                title="Add a new Hot Topic">Add New</button>
+            <button
+                onclick="closeDialog(); return false"
+                type="submit"
+                class="close"
+                accesskey="x"
+                title="Close (x)">Close</button>
+        </div>
+    </div>
+</form>
+
+<mt:Include name="dialog/footer.tmpl">

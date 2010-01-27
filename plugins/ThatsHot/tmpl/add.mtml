@@ -1,0 +1,153 @@
+<mt:setvarblock name="page_title">Add a new Hot Topic</mt:setvarblock>
+<mt:SetVarBlock name="html_head" append="1">
+    <script type="text/javascript" src="<mt:Var name="static_uri">plugins/ThatsHot/js/cms.js"></script>
+    <script type="text/javascript">
+        <mt:Include name="inline-js.mtml">
+    </script>
+    <link rel="stylesheet" href="<mt:Var name="static_uri">plugins/ThatsHot/css/cms.css" type="text/css" />
+</mt:SetVarBlock>
+<mt:setvarblock name="js_include" append="1">
+<script type="text/javascript" src="http://localhost/mt4261-static/mt.js?v=4.261"></script>
+<script type="text/javascript" src="<mt:var name="static_uri">js/edit.js?v=<mt:var name="mt_version" escape="url">"></script>
+<mt:include name="include/calendar.tmpl">
+</mt:setvarblock>
+
+<mt:Include name="dialog/header.tmpl">
+
+<div id="modal-mask" class="autolayout-height-parent modal-mask hidden">
+    <div></div>
+</div>
+
+<mt:Ignore> Don't use the html_body variable for the calendar, because it will include the "autolayout-flyout-smart" class, which positions the calendar poorly.
+<mt:Var name="html_body">
+</mt:Ignore>
+
+<div id="calendar" class="calendar hidden">
+    <div id="calendar-content" class="calendar-content pkg"></div>
+    <div class="calendar-footer">
+        <input type="hidden" id="calendar-time-input" name="ignore-me-time-input" value="00:00:00" />
+        <a class="calendar-ok-link" href="javascript:void(0);" mt:command="save"><__trans phrase="OK"></a>
+    </div>
+</div>
+
+
+<div id="msg-container">
+<mt:if name="topic_conflict">
+    <mtapp:statusmsg
+        id="message"
+        class="error">
+        The topic you entered is at least a partial match for another topic already saved (either the title or URL/search term is not unique). The saved topic is displayed below. Make this topic hot, or enter create a new unique topic to continue.
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="topic_search">
+    <mtapp:statusmsg
+        id="message"
+        class="success">
+        Your topic search yielded a result, and is presented below.
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="topic_search_failed">
+    <mtapp:statusmsg
+        id="message"
+        class="alert">
+        Your topic search yielded no result. Modify your search or just create a new topic.
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="hot_count">
+    <mtapp:statusmsg
+        id="message"
+        class="alert">
+        There are currently <mt:Var name="hot_count"> hot topics. This site's administrator recommends no more than <mt:Var name="hot_limit"> topics be hot at any one time.
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="currently_hot">
+    <mtapp:statusmsg
+        id="message"
+        class="alert">
+        This topic is currently hot. Are you sure you want to reheat it now, duplicating it? Perhaps you meant to schedule it?
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="empty">
+    <mtapp:statusmsg
+        id="message"
+        class="error">
+        No topic information was entered. Enter some topic details to continue.
+    </mtapp:statusmsg>
+</mt:if>
+<mt:if name="date_format">
+    <mtapp:statusmsg
+        id="message"
+        class="error">
+        Invalid date <mt:Var name="date_format">; dates must be in the format YYYY-MM-DD HH:MM:SS.
+    </mtapp:statusmsg>
+</mt:if>
+</div>
+
+<form method="post" action="<mt:Var name="script_url">" name="add">
+    <input type="hidden" name="__mode" value="save_hot_topic" />
+    <input type="hidden" name="blog_id" value="<mt:Var name="blog_id">" />
+<mt:If name="currently_hot">
+    <input type="hidden" name="override" value="1" />
+</mt:If>
+
+    <p>Enter details to create a hot topic. Enter some text in the Title <em>or</em> URL <em>or</em> Keyword to search for an existing topic you want to reheat.</p>
+
+    <mt:Include name="fields.mtml">
+
+    <script type="text/javascript">
+    <mt:If name="class" eq="url">
+        TopicURL();
+    <mt:Else name="class" eq="keyword">
+        TopicKeyword();
+    <mt:Else name="class" eq="tag">
+        TopicTag();
+    </mt:If>
+    </script>
+
+
+    <mtapp:Setting
+        id="status"
+        label="Status">
+        <div>
+            <input type="radio" name="status" id="status-now" value="1" onClick="StatusNow();" checked="checked" />
+            <label for="status-now">Make this topic hot now.</label>
+        </div>
+        <div>
+            <input type="radio" name="status" id="status-schedule" value="2" onClick="StatusSchedule();" />
+            <label for="status-schedule">Schedule this topic&rsquo;s hotness.</label>
+            <span id="date-time-fields" class="hidden">
+                <input id="created-on" class="topic-date" name="date" value="<mt:Var name="date" escape="html">" />
+                <a href="javascript:void(0);" mt:command="open-calendar-created-on" class="date-picker" title="Select scheduled date"><span>Choose Date</span></a>
+                <input class="topic-time" name="time" value="<mt:Var name="time" escape="html">" />
+            </span>
+        </div>
+    </mtapp:Setting>
+
+    <div class="actions-bar">
+        <div class="actions-bar-inner pkg actions">
+            <button
+                mt:mode="save_hot_topic"
+                type="submit"
+                class="primary-button"
+                accesskey="s"
+                title="Save (s)">Save</button>
+<mt:If name="topic_conflict"><mt:SetVar name="show_add_button" value="1"></mt:If>
+<mt:if name="already_hot"><mt:SetVar name="show_add_button" value="1"></mt:If>
+<mt:If name="show_add_button">
+            <button
+                mt:mode="add_hot_topic"
+                type="submit"
+                class=""
+                title="Add a new Hot Topic">Add New</button>
+</mt:If>
+            <button
+                onclick="closeDialog(); return false"
+                type="submit"
+                class="close"
+                accesskey="x"
+                title="Close (x)">Close</button>
+        </div>
+    </div>
+</form>
+
+<mt:Include name="dialog/footer.tmpl">

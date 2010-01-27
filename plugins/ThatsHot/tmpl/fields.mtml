@@ -1,0 +1,123 @@
+<mtapp:setting
+    id="title"
+    required="1"
+    label="Topic Title"
+    hint="Enter a short title to describe your topic."
+    show_hint="1">
+        <input id="title" type="text" name="title" value="<mt:var name="title" escape="html">" class="ti" onChange="setElementValue('basename', dirify(this.value))" />
+</mtapp:setting>
+
+<script type="text/javascript">
+document.getElementById('title').focus();
+</script>
+
+<mtapp:Setting
+    id="class"
+    label="Topic Type"
+    hint="What type of topic should this title be linked to?"
+    show_hint="1">
+        <span>
+            <input type="radio" name="class" id="class-url" value="url" onClick="TopicURL();"<mt:If name="class" eq="url"> checked="checked"</mt:If> />
+            <label for="class-url">URL</label>
+        </span>
+        <span>
+            <input type="radio" name="class" id="class-keyword" value="keyword" onClick="TopicKeyword();"<mt:If name="class" eq="keyword"> checked="checked"</mt:If> />
+            <label for="class-keyword">Keyword</label>
+        </span>
+        <span>
+            <input type="radio" name="class" id="class-tag" value="tag" onClick="TopicTag();"<mt:If name="class" eq="tag"> checked="checked"</mt:If> />
+            <label for="class-tag">Tag</label>
+        </span>
+</mtapp:Setting>
+
+<mtapp:setting
+    id="url"
+    label_class="left-label"
+    required="1"
+    label="Topic URL"
+    hint="Enter the URL to your topic."
+    show_hint="1">
+        <input id="url" type="text" name="url" value="<mt:If name="class" eq="url"><mt:Var name="data" escape="html"></mt:If>" class="ti" onKeyUp="showPreviewLink();" onChange="showPreviewLink();" />
+        <div id="view-link-url" class="hidden"></div>
+</mtapp:setting>
+
+<mtapp:setting
+    id="keyword"
+    label_class="left-label"
+    required="1"
+    label="Topic Keyword"
+    hint="Enter a search keyword or phrase for your topic."
+    show_hint="1">
+        <input id="keyword" type="text" name="keyword" value="<mt:If name="class" eq="keyword"><mt:Var name="data" escape="html"></mt:If>" class="ti" onKeyUp="showPreviewLink();" onChange="showPreviewLink();" />
+        <div id="view-link-keyword" class="hidden"></div>
+        <div class="search-fields">
+            <p>Search in the following blogs: 
+                <span id="keyword-blog-names"><mt:Blogs blog_ids="$specified_blogs"><mt:BlogName><mt:Unless name="__last__">, </mt:Unless></mt:Blogs></span>. 
+            <mt:If name="search_override">
+                <a href="javascript:showSearchOverride();">Override this</a>.
+            </mt:If>
+            </p>
+        </div>
+</mtapp:setting>
+
+<mtapp:Setting
+    id="tag"
+    label_class="left-label"
+    required="1"
+    label="Topic Tag"
+    hint="Enter a tag for your topic or <a href="javascript:showTagSuggestions();">see tag suggestions</a>."
+    show_hint="1">
+        <input id="tag" type="text" name="tag" value="<mt:If name="class" eq="tag"><mt:Var name="data" escape="html"></mt:If>" class="ti" onKeyUp="showPreviewLink();" onChange="showPreviewLink();" />
+        <div id="view-link-tag" class="hidden"></div>
+        <div class="search-fields">
+            <p>Search in the following blogs: 
+                <span id="tag-blog-names"><mt:Blogs blog_ids="$specified_blogs"><mt:BlogName><mt:Unless name="__last__">, </mt:Unless></mt:Blogs></span>. 
+            <mt:If name="search_override">
+                <a href="javascript:showSearchOverride();">Override this</a>.
+            </mt:If>
+            </p>
+        </div>
+</mtapp:Setting>
+
+<mtapp:Setting
+    id="basename"
+    label="Basename"
+    shown="$basename_override">
+        <input type="text" <mt:If name="id">disabled="disabled" </mt:If>name="basename" id="basename" value="<mt:Var name="basename" escape="html">" onChange="setElementValue('basename', dirify(this.value))" />
+    <mt:If name="id">
+        <a href="javascript:void(0);" id="basename-lock" title="<__trans phrase="Unlock this topic&rsquo;s output filename for editing">" onClick="return toggleFile()"><span>Unlock</span></a>
+        <p class="alert-warning-inline" id="basename-warning" style="display: none">
+            <img src="<mt:Var name="static_uri">images/status_icons/warning.gif" alt="<__trans phrase="Warning">" width="9" height="9" />
+            <__trans phrase="Warning: Changing this topic's basename may break inbound links.">
+        </p>
+    </mt:If>
+</mtapp:Setting>
+
+<mt:If name="tag_suggestions">
+    <div id="tag-suggestions">
+        <div id="tag-suggestions-inner">
+            <h4>Tag Suggestions</h4>
+            <p>Click to select a tag used in the following blogs: <mt:Blogs blog_ids="$specified_blogs"><mt:BlogName><mt:Unless name="__last__">, </mt:Unless></mt:Blogs>.</p>
+            <div id="top-tags">
+                <p><strong>Top 20 Tags:</strong> <mt:Tags blog_ids="$specified_blogs" sort_by="rank" limit="20" glue=", "><a href="javascript:insertTag('<mt:TagName encode_js="1">');"><mt:TagName></a></mt:Tags></p>
+            </div>
+            <div id="recent-tags">
+                <p><strong>20 Newest Tags:</strong> <mt:Tags blog_ids="$specified_blogs" sort_by="id" sort_order="descend" limit="20" glue=", "><a href="javascript:insertTag('<mt:TagName encode_js="1">');"><mt:TagName></a></mt:Tags></p>
+            </div>
+        </div>
+        <p class="close-link"><a href="javascript:hideTagSuggestions();"><__trans phrase="Close"></a></p>
+    </div>
+</mt:If>
+<mt:If name="search_override">
+    <div id="search-override">
+        <p>Select the blogs to be included in a search.</p>
+        <select multiple="multiple" name="select_blogs" id="select_blogs">
+            <mt:Loop name="blogs_loop">
+            <option value="<mt:Var name="id">"<mt:If name="selected"> selected="selected"</mt:If>>
+                <mt:Var name="name">
+            </option>
+            </mt:Loop>
+        </select>
+        <p class="ok-link"><a href="javascript:acceptSearchOverride();"><__trans phrase="OK"></a></p>
+    </div>
+</mt:If>

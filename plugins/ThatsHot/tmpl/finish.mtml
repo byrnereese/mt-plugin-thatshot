@@ -1,0 +1,31 @@
+<mt:setvarblock name="page_title">Hot Topic Created</mt:setvarblock>
+
+<mt:Include name="dialog/header.tmpl">
+
+<script type="text/javascript">
+    closeDialog();
+</script>
+
+
+<div id="msg-container">
+    <mtapp:statusmsg
+        id="message"
+        class="success">
+        Your hot topic has been added successfully.
+    </mtapp:statusmsg>
+</div>
+
+<form method="post" action="<mt:Var name="script_url">" name="add">
+    <div class="actions-bar">
+        <div class="actions-bar-inner pkg actions">
+            <button
+                onclick="closeDialog(); return false"
+                type="submit"
+                class="close"
+                accesskey="x"
+                title="Close (x)">Close</button>
+        </div>
+    </div>
+</form>
+
+<mt:Include name="dialog/footer.tmpl">

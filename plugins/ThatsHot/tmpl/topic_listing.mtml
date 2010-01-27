@@ -1,0 +1,110 @@
+<mt:SetVar name="page_title" value="List Topics">
+<mt:SetVarBlock name="html_head" append="1">
+    <script type="text/javascript"><!--
+        var tableSelect;
+        function init() {
+            tableSelect = new TC.TableSelect("topics-listing-table");
+            tableSelect.rowSelect = true;
+        }
+        TC.attachLoadEvent(init);
+      </script>
+</mt:SetVarBlock>
+<mt:SetVarBlock name="system_msg">
+</mt:SetVarBlock>
+<mt:SetVarBlock name="related_content">
+    <mtapp:widget
+        id="quickfilters"
+        label="Quickfilters">
+        <mtapp:ListFilters>
+        <ul>
+            <li><a href="<mt:Var name="script_uri">?__mode=list_hot_topics&blog_id=<mt:Var name="blog_id">">Manage hot topics</a></li>
+        </ul>
+    </mtapp:widget>
+    
+</mt:SetVarBlock>
+<mt:SetVarBlock name="action_buttons">
+</mt:SetVarBlock>
+<mt:SetVarBlock name="html_body_footer">
+    <mt:Include name="include/display_options.tmpl">
+</mt:SetVarBlock>
+
+<mt:Include name="include/header.tmpl">
+
+<div class="listing-filter">
+    <div class="listing-filter-inner inner pkg">
+        <div class="filter">
+            <div id="filter-title" class="filter-title">
+        <mt:unless name="filter">
+                <strong>All Topics</strong>
+        <mt:else>
+            <mt:if name="filter_key">
+                <strong><__trans phrase="Showing only: [_1]" params="<mt:var name="filter_label">"></strong>
+                <a href="<mt:var name="script_url">?__mode=<mt:var name="mode" escape="url"><mt:if name="blog_id">&amp;blog_id=<mt:var name="blog_id"></mt:if>">[ <__trans phrase="Remove filter"> ]</a>
+            </mt:if>
+        </mt:unless>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mtapp:Listing type="topics" 
+    default="No Topics could be found." 
+    empty_message="No Topics could be found.">
+    <mt:If name="__first__">
+        <thead>
+            <tr>
+                <th class="title">Topic Title</th>
+                <th class="author">Author</th>
+                <th class="date">Created</th>
+                <th class="view">View</th>
+                <th class="reheated_count">Times Reheated</th>
+                <th class="reheated_date">Recently Hot</th>
+            </tr>
+        </thead>
+        <tbody>
+    </mt:If>
+            <tr class="<mt:If name="__odd__">odd<mt:Else>even</mt:If>">
+                <td class="title">
+                    <a href="<mt:var name="script_url">?__mode=edit_topic&topic_id=<mt:Var name="id">&blog_id=<mt:Var name="blog_id">"><mt:Var name="title" remove_html="1"></a>
+                </td>
+                <td class="author">
+                    <mt:Var name="author">
+                </td>
+                <td class="date">
+                    <span title="<mt:Var name="created_on_time_formatted">">
+                        <mt:if name="created_on_relative">
+                            <mt:if name="dates_relative">
+                                <mt:Var name="created_on_relative">
+                            <mt:else>
+                                <mt:Var name="created_on_formatted">
+                            </mt:if>
+                        <mt:else>
+                                <mt:Var name="created_on_formatted">
+                        </mt:if>
+                    </span>
+                </td>
+                <td class="view si status-view">
+                    <a href="<mt:Var name="view">" title="View topic" target="_blank">
+                        <img src="<mt:Var name="static_uri">images/spacer.gif" alt="View topic" width="13" height="9" />
+                    </a>
+                </td>
+                <td class="reheated_count">
+                    <mt:Var name="reheated_count">
+                </td>
+                <td class="reheated_date">
+                    <span title="<mt:Var name="reheated_time_formatted">">
+                        <mt:if name="reheated_relative">
+                            <mt:if name="dates_relative">
+                                <mt:Var name="reheated_relative">
+                            <mt:else>
+                                <mt:Var name="reheated_formatted">
+                            </mt:if>
+                        <mt:else>
+                                <mt:Var name="reheated_formatted">
+                        </mt:if>
+                    </span>
+                </td>
+            </tr>
+</mtapp:listing>
+
+<mt:Include name="include/footer.tmpl">

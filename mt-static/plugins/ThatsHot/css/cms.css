@@ -1,0 +1,143 @@
+.ti { width: 470px; }
+
+#class-field span { padding-right: 20px; }
+
+/* By default, hide the keyword and tag fields, and only show the URL field */
+#keyword-field,
+#tag-field { display: none; }
+
+.field-content p {
+    margin: 0;
+}
+
+#status-field {
+    clear: both;
+    width: 100%;
+}
+#status-field div {
+    position: relative;
+    margin-bottom: 3px;
+}
+
+#calendar {
+    position: absolute;
+    top: 250px;
+    left: 300px;
+    margin: 0;
+}
+
+#date-time-fields {
+    width: 210px;
+    position: absolute;
+    left: 200px;
+    top: -5px;
+}
+
+#date-time-fields * { float: left; }
+
+#date-time-fields input {
+    width: 80px;
+    text-align: center;
+}
+
+/* Style the blog select popup container on the dialog. 
+   This is modeled after the calendar pop-up. */
+#search-override {
+    border: 1px solid #999;
+    background: #fff;
+    width: 240px;
+    padding: 5px;
+    z-index: 1;
+    position: absolute;
+    top: 175px;
+    left: 250px;
+    display: none;
+}
+
+/* Refine the popup container styling on the Edit screen */
+.thatshot-edit form { position: relative; }
+.thatshot-edit #search-override {
+    top: 100px;
+    left: 250px;
+}
+
+#search-override p { margin: 0; }
+#tag-suggestions p.close-link,
+#search-override p.ok-link { margin: 5px 0 0; text-align: center; }
+
+#select_blogs {
+    height: 100px;
+    width: 240px;
+}
+
+/* The tag suggestions pop-up gets some styling, too. */
+#tag-suggestions {
+    border: 1px solid #999;
+    background: #fff;
+    width: 270px;
+    height: 240px;
+    overflow: auto;
+    position: absolute;
+    z-index: 1;
+    top: 175px;
+    left: 250px;
+    display: none;
+}
+
+.thatshot-edit #tag-suggestions {
+    top: 100px;
+    left: 250px;
+}
+
+#tag-suggestions-inner {
+    padding: 5px;
+    height: 205px;
+    overflow: auto;
+}
+
+#tag-suggestions h4 { margin-top: 0; }
+
+#tag-suggestions p { margin-bottom: 4px; }
+#tag-suggestions p.close-link { 
+    position: absolute;
+    bottom: 5px;
+    width: 270px;
+    margin-top: 7px;
+}
+
+
+/* Edit Topic screen */
+
+#history-field {
+    margin-top: 20px;
+}
+
+#history-field table {
+    border: 1px solid #cddee7;
+}
+
+#view-field .field-content {
+    padding-top: 2px;
+}
+
+#basename { float: left; }
+#basename-lock { float: left; }
+
+
+/* Search Results screen */
+
+#search-result-field ul#search-results {
+    float: left;
+    width: 475px;
+    max-height: 240px;
+    overflow: auto;
+}
+.search-results-item { 
+    float: left;
+    width: 100%;
+    clear: both;
+    margin-bottom: 5px;
+}
+.search-results-item input { position: relative; top: 8px; }
+.search-results-item input,
+.search-results-item label { float: left; margin: 0 7px 10px 0; }

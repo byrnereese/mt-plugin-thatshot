@@ -1,0 +1,156 @@
+<mt:setvarblock name="page_title">Edit Topic</mt:setvarblock>
+<mt:SetVarBlock name="html_head" append="1">
+    <script type="text/javascript" src="<mt:Var name="static_uri">plugins/ThatsHot/js/cms.js"></script>
+    <script type="text/javascript">
+        <mt:Include name="inline-js.mtml">
+    </script>
+    <link rel="stylesheet" href="<mt:Var name="static_uri">plugins/ThatsHot/css/cms.css" type="text/css" />
+</mt:SetVarBlock>
+
+<mt:setvarblock name="related_content">
+    <mtapp:Widget
+        id="view"
+        label="View Topic">
+            <a href="<mt:Var name="view">" target="_blank"><mt:Var name="data"></a>
+            <a href="<mt:Var name="view">" target="_blank"><img src="<mt:Var name="static_uri">images/status_icons/view.gif" width="13" height="9" alt="View" /></a>
+    </mtapp:Widget>
+    <mtapp:Widget
+        id="topic-metadata"
+        label="Topic metadata">
+        <ul>
+            <li>Topic created by <mt:Var name="topic_created_by"> on <mt:Var name="topic_created_on">.</li>
+        <mt:If name="topic_modified_by">
+            <li>Topic most recently modified by <mt:Var name="topic_modified_by"> on <mt:Var name="topic_modified_on">.</li>
+        </mt:If>
+        </ul>
+    </mtapp:Widget>
+    <mtapp:Widget
+        id="useful-links"
+        label="<__trans phrase="Useful links">">
+        <ul>
+            <li><a href="<mt:var name="script_url">?__mode=list_hot_topics&amp;blog_id=<mt:Var name="blog_id">">Manage Hot Topics</a></li>
+            <li><a href="<mt:Var name="script_uri">?__mode=list_topics&blog_id=<mt:Var name="blog_id">">List topics</a></li>
+        </ul>
+    </mtapp:Widget>
+    <mtapp:PageActions>
+</mt:setvarblock>
+<mt:SetVarBlock name="system_msg">
+    <div id="msg-block">
+        <mt:if name="saved">
+            <mtapp:statusmsg
+                id="message"
+                class="success">
+                This topic has been successfully saved.
+            </mtapp:statusmsg>
+        </mt:if>
+        <mt:if name="incomplete">
+            <mtapp:statusmsg
+                id="message"
+                class="error">
+                This topic has not been saved. Both the Title and URL or Keyword fields are required.
+            </mtapp:statusmsg>
+        </mt:if>
+        <mt:if name="exists_id">
+            <mtapp:statusmsg
+                id="message"
+                class="error">
+                This topic has not been saved. The title and/or URL or keyword you supplied are used in the topic <a href="<mt:Var name="script_uri">?__mode=edit_topic&blog_id=<mt:Var name="blog_id">&topic_id=<mt:Var name="exists_id">"><mt:Var name="exists_title"></a>
+            </mtapp:statusmsg>
+        </mt:if>
+        <mt:if name="cold">
+            <mtapp:statusmsg
+                id="cold"
+                class="success">This topic has been made cold.
+            </mtapp:statusmsg>
+        </mt:if>
+        <mt:if name="hot">
+            <mtapp:statusmsg
+                id="hot"
+                class="success">This topic has been made hot.
+            </mtapp:statusmsg>
+        </mt:if>
+    </div>
+</mt:SetVarBlock>
+
+<mt:SetVar name="screen_class" value="thatshot-edit">
+
+<mt:include name="include/header.tmpl">
+
+
+<form method="post" action="<mt:Var name="script_url">" name="add">
+    <input type="hidden" name="__mode" value="save_topic" />
+    <input type="hidden" name="edit_topic" value="1" />
+    <input type="hidden" name="blog_id" value="<mt:Var name="blog_id">" />
+    <input type="hidden" name="id" value="<mt:Var name="id">" />
+
+    <mt:Include name="fields.mtml">
+
+    <script type="text/javascript">
+    <mt:If name="class" eq="url">
+        TopicURL();
+    <mt:Else name="class" eq="keyword">
+        TopicKeyword();
+    <mt:Else name="class" eq="tag">
+        TopicTag();
+    </mt:If>
+    </script>
+    
+    <div class="actions-bar">
+        <div class="actions-bar-inner pkg actions">
+            <button
+                mt:mode="save_topic"
+                type="submit"
+                class="primary-button"
+                accesskey="s"
+                onClick="document.getElementById('basename').removeAttribute('disabled');"
+                title="Save Topic (s)">Save Topic
+            </button>
+            <button
+                mt:mode="make_hot_now"
+                type="submit"
+                title="Reheat this topic now">Reheat
+            </button>
+            <button
+                mt:mode="make_cold_now"
+                type="submit"
+                title="Make this topic cold now">Cold
+            </button>
+        </div>
+    </div>
+    
+</form>
+
+
+<mtapp:setting
+    id="history"
+    label="Topic History">
+    <table valign="middle" class="listing" style="width: 400px;">
+        <thead>
+            <tr>
+                <th class="status si">
+                    <img src="<$mt:var name="static_uri"$>images/status_icons/invert-flag.gif" alt="<__trans phrase="Status">" title="<__trans phrase="Status">" width="9" height="9" />
+                </th>
+                <th class="author">Author</th>
+                <th class="date">Created</th>
+            </tr>
+        </thead>
+        <tbody>
+        <mt:Loop name="history">
+            <tr class="<mt:If name="__odd__">odd<mt:Else>even</mt:If>">
+                <td class="status si">
+                    <img src="<mt:Var name="static_uri">plugins/ThatsHot/images/<mt:Var name="status" dirify="-">.png" width="9" height="9" alt="<mt:Var name="status">" title="<mt:Var name="status">" />
+                </td>
+                <td class="author">
+                    <mt:Var name="author">
+                </td>
+                <td class="date">
+                    <mt:Var name="date"> <mt:Var name="time">
+                </td>
+            </tr>
+        </mt:Loop>
+        </tbody>
+    </table>
+</mtapp:setting>
+
+
+<mt:include name="include/footer.tmpl">

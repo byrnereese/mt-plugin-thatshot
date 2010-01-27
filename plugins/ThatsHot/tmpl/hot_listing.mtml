@@ -1,0 +1,134 @@
+<mt:SetVar name="page_title" value="Manage Hot Topics">
+<mt:SetVarBlock name="html_head" append="1">
+    <script type="text/javascript"><!--
+        var tableSelect;
+        function init() {
+            tableSelect = new TC.TableSelect("hot_topics-listing-table");
+            tableSelect.rowSelect = true;
+        }
+        TC.attachLoadEvent(init);
+      </script>
+</mt:SetVarBlock>
+<mt:SetVarBlock name="system_msg">
+    <mt:if name="cold">
+        <mtapp:statusmsg
+            id="cold"
+            class="success">The selected topics have been made cold.
+        </mtapp:statusmsg>
+    </mt:if>
+    <mt:if name="hot">
+        <mtapp:statusmsg
+            id="hot"
+            class="success">The selected topics have been made hot.
+        </mtapp:statusmsg>
+    </mt:if>
+    <mt:if name="hot_topic_deleted">
+        <mtapp:statusmsg
+            id="hot"
+            class="success">The selected topics have been deleted.
+        </mtapp:statusmsg>
+    </mt:if>
+</mt:SetVarBlock>
+<mt:SetVarBlock name="related_content">
+    <mtapp:widget
+        id="quickfilters"
+        label="Quickfilters">
+        <mtapp:ListFilters>
+        <ul>
+            <li><a href="<mt:Var name="script_uri">?__mode=list_topics&blog_id=<mt:Var name="blog_id">">List topics</a></li>
+        </ul>
+    </mtapp:widget>
+    
+</mt:SetVarBlock>
+<mt:SetVarBlock name="action_buttons">
+    <a href="javascript:void(0)"
+         onclick="doForMarkedInThisWindow(
+             getByID('hot_topics-listing-form'),
+             'topic', 'topics', 'id', 'make_hot_now'); 
+             return false;"
+         title="Reaheat to make a new hot topic">Reheat</a>
+    <a href="javascript:void(0)"
+         onclick="doForMarkedInThisWindow(
+             getByID('hot_topics-listing-form'),
+             'topic', 'topics', 'id', 'make_cold_now'); 
+             return false;"
+         title="Make cold">Make Cold</a>
+</mt:SetVarBlock>
+<mt:SetVarBlock name="html_body_footer">
+    <mt:Include name="include/display_options.tmpl">
+</mt:SetVarBlock>
+
+<mt:Include name="include/header.tmpl">
+
+<div class="listing-filter">
+    <div class="listing-filter-inner inner pkg">
+        <div class="filter">
+            <div id="filter-title" class="filter-title">
+        <mt:unless name="filter">
+                <strong>All Hot Topics</strong>
+        <mt:else>
+            <mt:if name="filter_key">
+                <strong><__trans phrase="Showing only: [_1]" params="<mt:var name="filter_label">"></strong>
+                <a href="<mt:var name="script_url">?__mode=<mt:var name="mode" escape="url"><mt:if name="blog_id">&amp;blog_id=<mt:var name="blog_id"></mt:if>">[ <__trans phrase="Remove filter"> ]</a>
+            </mt:if>
+        </mt:unless>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mtapp:Listing type="hot_topics" 
+    default="No Hot Topics could be found." 
+    empty_message="No Hot Topics could be found.">
+    <mt:If name="__first__">
+        <thead>
+            <tr>
+                <th class="cb">
+                    <input type="checkbox" id="select-all-checkbox" name="id-head" value="all" class="select" />
+                </th>
+                <th class="status si">
+                    <img src="<$mt:var name="static_uri"$>images/status_icons/invert-flag.gif" alt="<__trans phrase="Status">" title="<__trans phrase="Status">" width="9" height="9" />
+                </th>
+                <th class="title">Topic Title</th>
+                <th class="author">Author</th>
+                <th class="date">Created</th>
+                <th class="view">View</th>
+            </tr>
+        </thead>
+        <tbody>
+    </mt:If>
+            <tr class="<mt:If name="__odd__">odd<mt:Else>even</mt:If>">
+                <td class="cb">
+                    <input type="checkbox" name="id" value="<mt:Var name="id">" class="select" />
+                </td>
+                <td class="status si">
+                    <img src="<mt:Var name="static_uri">plugins/ThatsHot/images/<mt:Var name="status" dirify="-">.png" width="9" height="9" alt="<mt:Var name="status">" title="<mt:Var name="status">" />
+                </td>
+                <td class="title">
+                    <a href="<mt:var name="script_url">?__mode=edit_topic&topic_id=<mt:Var name="topic_id">&blog_id=<mt:Var name="blog_id">"><mt:Var name="title" remove_html="1"></a>
+                </td>
+                <td class="author">
+                    <mt:Var name="author">
+                </td>
+                <td class="date">
+                    <span title="<mt:Var name="created_on_time_formatted">">
+                        <mt:if name="created_on_relative">
+                            <mt:if name="dates_relative">
+                                    <mt:Var name="created_on_relative">
+                            <mt:else>
+                                    <mt:Var name="created_on_formatted">
+                            </mt:if>
+                        <mt:else>
+                                    <mt:Var name="created_on_formatted">
+                        </mt:if>
+                    </span>
+                </td>
+                <td class="view si status-view">
+                    <a href="<mt:Var name="view">" title="View topic" target="_blank">
+                        <img src="<mt:Var name="static_uri">images/spacer.gif" alt="View topic" width="13" height="9" />
+                    </a>
+                </td>
+            </tr>
+</mtapp:listing>
+
+<mt:Include name="include/footer.tmpl">
