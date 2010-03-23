@@ -11,7 +11,6 @@ __PACKAGE__->install_properties({
     },
     audit => 1,
     indexes => {
-        id       => 1,
         blog_id  => 1,
         topic_id => 1,
     },
@@ -19,6 +18,14 @@ __PACKAGE__->install_properties({
     primary_key => 'id',
     class_type  => 'hot',
 });
+
+sub class_label {
+    MT->translate("Hot Topic");
+}
+
+sub class_label_plural {
+    MT->translate("Hot Topics");
+}
  
 1;
 

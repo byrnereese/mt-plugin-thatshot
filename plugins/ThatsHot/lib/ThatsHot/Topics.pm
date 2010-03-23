@@ -14,7 +14,6 @@ __PACKAGE__->install_properties({
     },
     audit => 1,
     indexes => {
-        id        => 1,
         blog_id   => 1,
         title     => 1,
         data      => 1,
@@ -23,6 +22,14 @@ __PACKAGE__->install_properties({
     primary_key => 'id',
     class_type  => 'url',
 });
+
+sub class_label {
+    MT->translate("Topic");
+}
+
+sub class_label_plural {
+    MT->translate("Topics");
+}
  
 1;
 
